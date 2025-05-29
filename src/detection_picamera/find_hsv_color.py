@@ -1,19 +1,18 @@
 import cv2
 import numpy as np
-from picamera.array import PiRGBArray
-from picamera import PiCamera
 import time
+from picamera2 import Picamera2
 
 def nothing(x):
     pass
 
 def find_color_code():
-    # Initialize the PiCamera
-    camera = PiCamera()
-    camera.resolution = (640, 480)
-    camera.framerate = 32
-    rawCapture = PiRGBArray(camera, size=(640, 480))
-
+    # Initialize the Picamera2
+    picam2 = Picamera2()
+    config = picam2.create_preview_configuration(main={"size": (640, 480)})
+    picam2.configure(config)
+    picam2.start()
+    
     # Allow camera to warm up
     time.sleep(0.1)
 
@@ -26,11 +25,10 @@ def find_color_code():
     cv2.createTrackbar("US", "Tracking", 255, 255, nothing)
     cv2.createTrackbar("UV", "Tracking", 255, 255, nothing)
 
-    # Capture frames from the PiCamera
-    for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=True):
-        image = frame.array
-
-        hsv = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
+    while True:
+        # Capture frame as numpy array
+        frame = picam2.capture_array()
+        hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
 
         l_h = cv2.getTrackbarPos("LH", "Tracking")
         l_s = cv2.getTrackbarPos("LS", "Tracking")
@@ -43,26 +41,23 @@ def find_color_code():
         upper_bound = np.array([u_h, u_s, u_v])
 
         mask = cv2.inRange(hsv, lower_bound, upper_bound)
-        result = cv2.bitwise_and(image, image, mask=mask)
+        result = cv2.bitwise_and(frame, frame, mask=mask)
 
-        cv2.imshow("Live Transmission", image)
+        cv2.imshow("Live Transmission", frame)
         cv2.imshow("Mask", mask)
         cv2.imshow("Result", result)
 
-        # Check for ESC key
         k = cv2.waitKey(1) & 0xFF
         if k == 27:  # ESC key
             print("ESC pressed. Exiting.")
             break
 
-        # Check if the window was closed with the X button
         if cv2.getWindowProperty("Live Transmission", cv2.WND_PROP_VISIBLE) < 1:
             print("Window closed by user.")
             break
 
-        rawCapture.truncate(0)
-
     cv2.destroyAllWindows()
+    picam2.stop()
 
 if __name__ == "__main__":
     find_color_code()
