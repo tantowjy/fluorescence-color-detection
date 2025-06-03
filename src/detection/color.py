@@ -8,8 +8,8 @@ def color_detection():
     # Use 0 for default camera
     cap = cv2.VideoCapture(0)
 
-    l_h, l_s, l_v = 127, 26, 0 
-    u_h, u_s, u_v = 255, 177, 255
+    l_h, l_s, l_v = 99, 73, 250 
+    u_h, u_s, u_v = 255, 255, 255
 
     while True:
         ret, frame = cap.read()
@@ -35,7 +35,7 @@ def color_detection():
                     cx = int(M["m10"] / M["m00"])
                     cy = int(M["m01"] / M["m00"])
                     cv2.circle(frame, (cx, cy), 7, (255, 255, 255), -1)
-                    cv2.putText(frame, "violet", (cx - 20, cy - 20), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2)
+                    cv2.putText(frame, "flouresence", (cx - 20, cy - 20), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2)
 
         result = cv2.bitwise_and(frame, frame, mask=mask)
 

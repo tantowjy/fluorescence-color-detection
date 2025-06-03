@@ -39,7 +39,7 @@ def color_detection():
                     cx = int(M["m10"] / M["m00"])
                     cy = int(M["m01"] / M["m00"])
                     cv2.circle(image, (cx, cy), 7, (255, 255, 255), -1)
-                    cv2.putText(image, "violet", (cx - 20, cy - 20), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2)
+                    cv2.putText(image, "flouresence", (cx - 20, cy - 20), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2)
 
         result = cv2.bitwise_and(image, image, mask=mask)
 
