@@ -24,10 +24,10 @@ signal.signal(signal.SIGTSTP, clean_exit)  # Ctrl+Z
 # Main loop
 try:
     while True:
-        GPIO.output(RELAY, GPIO.HIGH)
+        GPIO.output(RELAY, GPIO.LOW)
         print("Relay ON")
         sleep(2)
-        GPIO.output(RELAY, GPIO.LOW)
+        GPIO.output(RELAY, GPIO.HIGH)
         print("Relay OFF")
         sleep(2)
 except Exception as e:

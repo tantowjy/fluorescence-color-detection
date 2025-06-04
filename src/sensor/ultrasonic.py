@@ -1,6 +1,8 @@
 import RPi.GPIO as GPIO
 import numpy as np
 import time
+import sys
+import signal
 
 # Pin configuration
 TRIG = 23
@@ -30,6 +32,15 @@ def measure_distance():
     pulse_duration = pulse_end - pulse_start
     distance = pulse_duration * 17150  # Speed of sound * time / 2
     return round(distance, 2)
+
+def clean_exit(signum=None, frame=None):
+    print("\nCleaning up GPIO and exiting...")
+    GPIO.cleanup()
+    sys.exit(0)
+
+# Register signal handlers for Ctrl+C and Ctrl+Z
+signal.signal(signal.SIGINT, clean_exit)   # Ctrl+C
+signal.signal(signal.SIGTSTP, clean_exit)  # Ctrl+Z
 
 def main():
     setup()

@@ -51,10 +51,10 @@ def main():
         print(f"Distance: {distance} cm")
 
         if 10 <= distance <= 15:
-            GPIO.output(RELAY, GPIO.HIGH)
+            GPIO.output(RELAY, GPIO.LOW)
             print("Relay ON")
         else:
-            GPIO.output(RELAY, GPIO.LOW)
+            GPIO.output(RELAY, GPIO.HIGH)
             print("Relay OFF")
 
         time.sleep(1)
