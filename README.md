@@ -1,7 +1,5 @@
 # README.md
 
-## Pinout Configuration
-
 <p align="left">
   <img src="assets/raspberry_pi_4_pinout.png" width="480" />
 </p>
