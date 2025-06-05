@@ -3,9 +3,10 @@ import time
 import signal
 import sys
 import cv2
+import os
 import numpy as np
 from picamera2 import Picamera2
-from playsound import playsound
+from playsound3 import playsound
 
 # GPIO Pins
 TRIG = 23
@@ -13,8 +14,10 @@ ECHO = 24
 RELAY = 17
 
 # Audio paths
-CLEAN_AUDIO = "/audio/clean.mp3"
-DIRTY_AUDIO = "/audio/dirty.mp3"
+base_dir = os.path.dirname(os.path.abspath(__file__))
+
+CLEAN_AUDIO = os.path.abspath(os.path.join(base_dir, 'audio', 'clean.mp3'))
+DIRTY_AUDIO = os.path.abspath(os.path.join(base_dir, 'audio', 'dirty.mp3'))
 
 # Setup GPIO
 GPIO.setwarnings(False)
@@ -81,11 +84,16 @@ def detect_fluorescence_with_visual(picam2):
         k = cv2.waitKey(1) & 0xFF
         if k == 27 or cv2.getWindowProperty("Live Transmission", cv2.WND_PROP_VISIBLE) < 1:
             print("Window closed by user or ESC pressed.")
+            print("\nCleaning up GPIO and exiting...")
+            GPIO.output(RELAY, GPIO.LOW)
+            GPIO.cleanup()
             break
 
         if detected:
             break
 
+    # time delay
+    time.sleep(2)
     cv2.destroyAllWindows()
     return detected
 
@@ -112,12 +120,12 @@ def main():
             print(f"Distance: {distance} cm")
 
             if 10 <= distance <= 15:
-                GPIO.output(RELAY, GPIO.HIGH)
+                GPIO.output(RELAY, GPIO.LOW)
                 print("Relay ON - checking for fluorescence")
 
                 detected = detect_fluorescence_with_visual(picam2)
 
-                GPIO.output(RELAY, GPIO.LOW)
+                GPIO.output(RELAY, GPIO.HIGH)
                 print("Relay OFF")
 
                 if detected:

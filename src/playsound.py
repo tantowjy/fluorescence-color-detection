@@ -5,8 +5,8 @@ from playsound3 import playsound
 base_dir = os.path.dirname(os.path.abspath(__file__))
 
 # Construct the full path to the audio files
-clean_path = os.path.abspath(os.path.join(base_dir, '..', 'audio', 'clean.mp3'))
-dirty_path = os.path.abspath(os.path.join(base_dir, '..', 'audio', 'dirty.mp3'))
+clean_path = os.path.abspath(os.path.join(base_dir, 'audio', 'clean.mp3'))
+dirty_path = os.path.abspath(os.path.join(base_dir, 'audio', 'dirty.mp3'))
 
 # Play the audio files
 playsound(clean_path)

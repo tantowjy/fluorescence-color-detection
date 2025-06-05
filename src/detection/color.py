@@ -8,7 +8,7 @@ def color_detection():
     # Use 0 for default camera
     cap = cv2.VideoCapture(0)
 
-    l_h, l_s, l_v = 99, 73, 250 
+    l_h, l_s, l_v = 135, 45, 0 
     u_h, u_s, u_v = 255, 255, 255
 
     while True:
@@ -41,7 +41,7 @@ def color_detection():
 
         cv2.imshow("Live Transmission", frame)
         # cv2.imshow("Mask", mask)
-        cv2.imshow("Result", result)
+        # cv2.imshow("Result", result)
 
         # Check for ESC key
         k = cv2.waitKey(1) & 0xFF
