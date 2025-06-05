@@ -129,11 +129,11 @@ def main():
                 print("Relay OFF")
 
                 if detected:
-                    print("Fluorescence detected: CLEAN")
-                    playsound(CLEAN_AUDIO)
-                else:
-                    print("No fluorescence: DIRTY")
+                    print("Fluorescence detected: DIRTY")
                     playsound(DIRTY_AUDIO)
+                else:
+                    print("No fluorescence: CLEAN")
+                    playsound(CLEAN_AUDIO)
 
             time.sleep(1)
     except KeyboardInterrupt:
