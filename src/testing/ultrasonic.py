@@ -1,30 +1,27 @@
-import RPi.GPIO as GPIO
-import time
 import signal
 import sys
+import time
+import RPi.GPIO as GPIO
 
 # Pin configuration
 TRIG = 23
 ECHO = 24
-RELAY = 17
-
-# Setup GPIO
-GPIO.setwarnings(False)
-GPIO.setmode(GPIO.BCM)
-GPIO.setup(TRIG, GPIO.OUT)
-GPIO.setup(ECHO, GPIO.IN)
-GPIO.setup(RELAY, GPIO.OUT)
 
 def setup():
+    GPIO.setmode(GPIO.BCM)
+    GPIO.setup(TRIG, GPIO.OUT)
+    GPIO.setup(ECHO, GPIO.IN)
     GPIO.output(TRIG, False)
     print("Waiting for sensor to settle...")
     time.sleep(2)
 
 def measure_distance():
+    # Send trigger pulse
     GPIO.output(TRIG, True)
-    time.sleep(0.00001)
+    time.sleep(0.00001)  # 10 microseconds
     GPIO.output(TRIG, False)
 
+    # Wait for echo response
     while GPIO.input(ECHO) == 0:
         pulse_start = time.time()
 
@@ -32,7 +29,7 @@ def measure_distance():
         pulse_end = time.time()
 
     pulse_duration = pulse_end - pulse_start
-    distance = pulse_duration * 17150
+    distance = pulse_duration * 17150  # Speed of sound * time / 2
     return round(distance, 2)
 
 def clean_exit(signum=None, frame=None):
@@ -46,18 +43,15 @@ signal.signal(signal.SIGTSTP, clean_exit)  # Ctrl+Z
 
 def main():
     setup()
-    while True:
-        distance = measure_distance()
-        print(f"Distance: {distance} cm")
-
-        if 10 <= distance <= 15:
-            GPIO.output(RELAY, GPIO.LOW)
-            print("Relay ON")
-        else:
-            GPIO.output(RELAY, GPIO.HIGH)
-            print("Relay OFF")
-
-        time.sleep(1)
+    try:
+        while True:
+            distance = measure_distance()
+            print("Distance:", distance, "cm")
+            time.sleep(1)
+    except KeyboardInterrupt:
+        print("Stopped by User")
+    finally:
+        GPIO.cleanup()
 
 if __name__ == "__main__":
     main()

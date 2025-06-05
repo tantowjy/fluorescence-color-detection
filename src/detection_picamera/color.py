@@ -1,7 +1,8 @@
+import time
+
 import cv2
 import numpy as np
 from picamera2 import Picamera2
-import time
 
 def nothing(x):
     pass
@@ -45,7 +46,7 @@ def color_detection():
 
         cv2.imshow("Live Transmission", image)
         # cv2.imshow("Mask", mask)
-        cv2.imshow("Result", result)
+        # cv2.imshow("Result", result)
 
         k = cv2.waitKey(1) & 0xFF
         if k == 27:  # ESC key

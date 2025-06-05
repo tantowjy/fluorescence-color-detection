@@ -1,7 +1,7 @@
-import RPi.GPIO as GPIO
 import signal
 import sys
-from time import sleep
+import time
+import RPi.GPIO as GPIO
 
 RELAY = 17  # Define the relay GPIO pin
 
@@ -26,10 +26,10 @@ try:
     while True:
         GPIO.output(RELAY, GPIO.LOW)
         print("Relay ON")
-        sleep(2)
+        time.sleep(2)
         GPIO.output(RELAY, GPIO.HIGH)
         print("Relay OFF")
-        sleep(2)
+        time.sleep(2)
 except Exception as e:
     print(f"An unexpected error occurred: {e}")
     clean_exit()

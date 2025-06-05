@@ -79,8 +79,13 @@ def detect_fluorescence_with_visual(picam2):
 
         result = cv2.bitwise_and(image, image, mask=mask)
 
-        cv2.imshow("Live Transmission", image)
-        # cv2.imshow("Result", result)
+        # Resize both images
+        resized_image = cv2.resize(image, (800, 600))
+        resized_result = cv2.resize(result, (800, 600))
+
+        # Show resized images
+        cv2.imshow("Live Transmission", resized_image)
+        # cv2.imshow("Result", resized_result)
 
         k = cv2.waitKey(1) & 0xFF
         if k == 27 or cv2.getWindowProperty("Live Transmission", cv2.WND_PROP_VISIBLE) < 1:
@@ -93,13 +98,12 @@ def detect_fluorescence_with_visual(picam2):
         if detected:
             break
 
-    # time delay
-    time.sleep(1)
-    cv2.destroyAllWindows()
+    # cv2.destroyAllWindows()
     return detected
 
 def clean_exit(signum=None, frame=None):
     print("\nCleaning up GPIO and exiting...")
+    cv2.destroyAllWindows()
     GPIO.output(RELAY, GPIO.LOW)
     GPIO.cleanup()
     sys.exit(0)
