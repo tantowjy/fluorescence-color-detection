@@ -10,7 +10,8 @@ def nothing(x):
 def color_detection():
     # Initialize PiCamera2
     picam2 = Picamera2()
-    picam2.configure(picam2.create_preview_configuration(main={"format": 'BGR888', "size": (640, 480)}))
+    config = picam2.create_preview_configuration(main={"format": 'BGR888', "size": (640, 480)})
+    picam2.configure(config)
     picam2.start()
 
     time.sleep(0.1)  # Allow camera to warm up
