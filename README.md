@@ -1,5 +1,12 @@
 # README.md
 
+### Create Virtual Environment
+```bash
+python -m venv --system-site-packages <name_venv>
+```
+
+### Pinout Configuration
+
 <p align="left">
   <img src="assets/raspberry_pi_4_pinout.png" width="480" />
 </p>
